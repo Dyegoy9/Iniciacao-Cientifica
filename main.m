@@ -85,5 +85,5 @@ function RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo)
         close all;
         findBest();
     end
-    
+    exit()
 end
