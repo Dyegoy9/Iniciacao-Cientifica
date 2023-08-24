@@ -25,7 +25,7 @@ function gpT(Server,res60,resLim60)
     replaceRate      = 0.1;
     initMaximumDepth = 3;
     initMinimumDepth = 2;
-    maximumDepth     = 6;
+    maximumDepth     = 4;
     nFunction        = 14;      % Numero de operacoes derivadas de outros detectores
     nBOperators      = 5;       % Numero de operadores binarios
     nUOperators      = 0;       % Numero de operadores unarios

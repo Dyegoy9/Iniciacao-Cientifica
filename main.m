@@ -1,7 +1,7 @@
 clear;clc;close;
 Server = true;
-GerarDados = true;
-DeleteMonteCarloData = true;
+GerarDados = false;
+DeleteMonteCarloData = false;
 RunEvo = true;
 %
 RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo);
