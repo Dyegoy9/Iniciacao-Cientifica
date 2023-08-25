@@ -24,7 +24,7 @@ function analiseVP(Server,res60,resLim60)
     fpM60 = mean(funcoes( MSCdna, RESESP60 )>lim60);
 
 
-    TOKEN = {'ResultadosEVO/EXPERIMENTO1*_pop.mat', 'ResultadosEVO/EXPERIMENTO1*_hist.mat'};
+    TOKEN = {'ResultadosEVO/EXPERIMENTO*_pop.mat', 'ResultadosEVO/EXPERIMENTO*_hist.mat'};
 
     for i = 1:2
         files = dir(TOKEN{i});

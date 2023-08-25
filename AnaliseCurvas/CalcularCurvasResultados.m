@@ -2,7 +2,7 @@ function CalcularCurvasResultados(Server)
     cd('..')
     MSCdna = treeGP(2001);
     addpath('AnaliseCurvas');
-    TOKEN = {'ResultadosEVO/EXPERIMENTO1*_pop.mat'};%, 'ResultadosEVO/EXPERIMENTO1*_hist.mat'};
+    TOKEN = {'ResultadosEVO/EXPERIMENTO*_pop.mat'};%, 'ResultadosEVO/EXPERIMENTO1*_hist.mat'};
     %SNR = -50:10;
     SNR = -40:0.25:0;
     curvaMSC = calcCurve(MSCdna);

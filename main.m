@@ -81,10 +81,10 @@ function RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo)
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     if RunEvo
         if ~Server
-            gpT(Server,res60,resLim60);
+            gpT(Server,res60,resLim60,'1');
         else
-            parfor i = 1:NumRep  
-            gpT(Server,res60,resLim60);
+            for i = 1:NumRep  
+            gpT(Server,res60,resLim60,num2str(i));
             %gpT(Server);
             end
         end
