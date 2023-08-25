@@ -109,7 +109,7 @@ function [fitnessIndividuos, individuos_bons] = getBest(vp60,fp60,increm,DNATudo
     Server = false;
     % Busca os indices do vetor falso positivo e verdadeiro positivo
     critFp60 = find(0.1 > fp60 > 0);
-    critVp60 = find(vp60 > 0.55);
+    critVp60 = find(vp60 > 0.48);
     critIncrem = find(increm>0);
     cont = 0;
     individuos_bons = [];
