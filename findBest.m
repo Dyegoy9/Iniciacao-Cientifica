@@ -11,7 +11,7 @@ curvaMSC = calcCurve(DnaMSC);
 
 if ExArq
     mkdir('ResultadosDetectores')
-    [fitnessIndividuos, individuos_bons] = getBest(vp60,fp60,DNATudo);
+    [fitnessIndividuos, individuos_bons] = getBest(vp60,fp60,increm,DNATudo);
     VpMelhores = vp60(individuos_bons);
     id = find(VpMelhores == max(VpMelhores));
     id = individuos_bons(id);
@@ -25,7 +25,8 @@ if ExArq
     plotBestRealData(id,curvaMSC,vp60,fp60,individuos_bons,curvasTudo);
     saveas(gcf,['ResultadosDetectores/CurvaSNRMelhorDetector.png'])
     %equacao = GetEquation(DNATudo,id(1));
-    BestDetectorsTest = TestBestDetectors(DnaMSC,DNATudo(individuos_bons),individuos_bons)
+    Melhoresincrem = increm(individuos_bons);
+    BestDetectorsTest = TestBestDetectors(DnaMSC,DNATudo(individuos_bons),Melhoresincrem)
     MelhoresDnas = DNATudo(individuos_bons);
     for i = 1:length(MelhoresDnas)
         MelhoresDnas(i).visualizemain;
@@ -84,7 +85,7 @@ function [ExArq,vp60,fp60,increm,curvasTudo,DNATudo ] = GetResultInfo(PrintNome)
     end
 end
 
-function [fitnessIndividuos, individuos_bons] = getBest(vp60,fp60,DNATudo)
+function [fitnessIndividuos, individuos_bons] = getBest(vp60,fp60,increm,DNATudo)
 %Busca os melhores indivíduos com base no critério de falso e verdadeiro
 %positivo simultaneamente
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -107,6 +108,7 @@ function [fitnessIndividuos, individuos_bons] = getBest(vp60,fp60,DNATudo)
     % Busca os indices do vetor falso positivo e verdadeiro positivo
     critFp60 = find(0.1 > fp60 > 0);
     critVp60 = find(vp60 > 0.48);
+    critIncrem = find(increm>0);
     cont = 0;
     individuos_bons = [];
     for i = 1:length(critFp60)
@@ -119,7 +121,12 @@ function [fitnessIndividuos, individuos_bons] = getBest(vp60,fp60,DNATudo)
             end
         end
     end
-    
+    IndividuosBonsIncrem = increm(individuos_bons);
+    for i = length(IndividuosBonsIncrem):-1:1
+        if IndividuosBonsIncrem(i) < 0
+            individuos_bons(i) = [];
+        end
+    end
     fitnessIndividuos = [];
     cont = 0;
     dominio = -40:0.25:0;
@@ -203,23 +210,23 @@ disp(["ID " id])
 end
 
 % Realiza o teste de MCnemar para os melhores detectores encontrados
-function TestParameters = TestBestDetectors(DnaMSC,DNAs,individuos_bons)
+function TestParameters = TestBestDetectors(DnaMSC,DNAs,increm)
 file = load('MC/resY_60.mat');
 res60 = file.res;
 file = load('MC/resX_60.mat');
 resLim60 = file.resLim;
 clear RES RESESP resLim
-TestParameters = zeros(length(DNAs),7);
+TestParameters = zeros(length(DNAs),8);
 for i = 1:length(DNAs)
     Fitness = fitness(DNAs(i),true,res60,resLim60);
     FitnessMSC = fitness(DnaMSC,true,res60,resLim60);
     [H,p,e1,e2] = McnemarTest60(DnaMSC,DNAs(i));
-    TestParameters(i,:) = [i,H,p,e1,FitnessMSC,e2,Fitness];
+    TestParameters(i,:) = [i,H,p,e1,FitnessMSC,e2,Fitness,increm(i)];
 end
 TestParameters = array2table(TestParameters);
 % Default heading for the columns will be A1, A2 and so on. 
 % You can assign the specific headings to your table in the following manner
-TestParameters.Properties.VariableNames(1:7) = {'Detector','H','P-Valor','TD-MSC','PD-MSC','TD','PD'};
+TestParameters.Properties.VariableNames(1:8) = {'Detector','H','P-Valor','TD-MSC','PD-MSC','TD','PD','Increm'};
 end
 
 function [H,p,e1,e2] = McnemarTest60(DNA1,DNA2)
