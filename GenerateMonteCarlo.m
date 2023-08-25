@@ -3,17 +3,17 @@ function GenerateMonteCarlo(Server)
 
     cd('GerarSinaisMonteCarlo')
 
-    if Server
+    if ~Server
         fprintf('Generating simulated signals for GP\n')
     end
     prepareSignals(Server)
 
-    if Server
+    if ~Server
         fprintf('Generating simulated signals with multiples SNR\n')
     end
     prepareSignalsCurve(Server)
 
-    if Server
+    if ~Server
         fprintf('Preparing real EEG data\n')
     end
 

@@ -5,6 +5,7 @@ function visualizeweight(this)
 	p = repelem(n,2);
 	p = [0 p];
 	treeplot(p);
+    title('Weights tree');
 	[x,y] = treelayout(p);
 	NameIndex = {};
 	for i = 1:length(p)

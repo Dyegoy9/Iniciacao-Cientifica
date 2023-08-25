@@ -1,9 +1,11 @@
-clear all
-clc
+clear all;clc;close all;
 PrintNome = false;
 
 [ExArq, vp60, fp60,increm,curvasTudo,DNATudo ] = GetResultInfo(PrintNome);
-
+try
+rmpath('AnaliseCurvas')
+catch
+end
 addpath('AnaliseCurvas');
 
 DnaMSC = treeGP(2001);
@@ -107,7 +109,7 @@ function [fitnessIndividuos, individuos_bons] = getBest(vp60,fp60,increm,DNATudo
     Server = false;
     % Busca os indices do vetor falso positivo e verdadeiro positivo
     critFp60 = find(0.1 > fp60 > 0);
-    critVp60 = find(vp60 > 0.48);
+    critVp60 = find(vp60 > 0.55);
     critIncrem = find(increm>0);
     cont = 0;
     individuos_bons = [];
@@ -140,21 +142,18 @@ end
 
 function plotAllBestSNR(curvaMSC,curvasTudo,individuos_bons)
 % busca o fítness dos melhores indivíduos e plota a curva em função da SNR
-    cont = 0;
     dominio = -40:0.25:0;
     for i = individuos_bons
-        cont = cont +1;
         plot(dominio,curvasTudo{1,i},'g');
         hold on;
     end
-    hold on;
-    %load('AnaliseCurvas/curvaMSC.mat');
-    plot(dominio,curvaMSC);
     p1 = plot(dominio,curvaMSC,'b');
     p1.DisplayName = 'MSC';
     legend(p1)
     ylabel('PD - Probability of Detection');
-    xlabel('SNR');
+    xlabel('SNR (dB)');
+    hold on;
+    plot(dominio,curvasTudo{1,individuos_bons(1)},'g','DisplayName','Best Ones')
     hold off
     
 end
@@ -176,7 +175,7 @@ function plotBestSNR(curvaMSC,curvasTudo,id)
     plot(dominio,curvaMSC);
     title('Melhor Indivíduo e MSC para valores de SNR');
     ylabel('PD - Probability of Detection');
-    xlabel('SNR');
+    xlabel('SNR (dB)');
     hold off;
     legend("Best ORD","MSC");
 end
@@ -199,7 +198,7 @@ hold on ;
 plot(dominio,curvaMSC);
 title('Melhor Indivíduo (Dados Reais) e MSC');
 ylabel('PD - Probability of Detection');
-xlabel('SNR');
+xlabel('SNR (dB)');
 hold off;
 legend("Best ORD","MSC");
 %disp(["FP " string(fp60(id)+fp30(id)/2)])
@@ -226,7 +225,7 @@ end
 TestParameters = array2table(TestParameters);
 % Default heading for the columns will be A1, A2 and so on. 
 % You can assign the specific headings to your table in the following manner
-TestParameters.Properties.VariableNames(1:8) = {'Detector','H','P-Valor','TD-MSC','PD-MSC','TD','PD','Increm'};
+TestParameters.Properties.VariableNames(1:8) = {'Detector','H','P-Valor','TD-MSC','PD-MSC','TD-ND','PD-ND','Increm'};
 end
 
 function [H,p,e1,e2] = McnemarTest60(DNA1,DNA2)

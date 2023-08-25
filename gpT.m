@@ -12,15 +12,17 @@ function gpT(Server,res60,resLim60)
 % parallel          - Flag to parallel computing of the fitness
     global nBOperators stop;
     stop             = false; % Utilizado para parar manualmente a evolucao na proxima geracao
-    populationSize   = 1000;
-    if Server
+    if Server 
+        parallel = true;
+        populationSize   = 1000;
         maxGeneration    = 100;
-        parallel = false;
+        numberOfElits    = 100;
     else
         parallel = false;
-        maxGeneration = 100;
+        populationSize   = 100;
+        maxGeneration    = 20;
+        numberOfElits    = 10;
     end
-    numberOfElits    = 100;
     mutationRate     = 0.05;
     replaceRate      = 0.1;
     initMaximumDepth = 3;
@@ -52,10 +54,9 @@ function gpT(Server,res60,resLim60)
     EXP = 'ResultadosEVO/EXPERIMENTO1*_pop.mat';
     nexp = length(dir(EXP));
     FILE = ['ResultadosEVO/EXPERIMENTO1_' num2str(nexp+1)];
-
-    if Server
-        fprintf('O algoritmo foi inicializado em %s\n',datestr(datetime()))
-        t = tic();
+    if ~Server
+    fprintf('O algoritmo foi inicializado em %s\n',datestr(datetime()))
+    t = tic();
     end
     % MAIN ALGORITHM
     generateInitialPop();
@@ -66,21 +67,18 @@ function gpT(Server,res60,resLim60)
         mutation();
         pop = futPop;
         bestOfGeneration(generation)=futPop(1);
-        if Server
-            fprintf('Fim da geracao %3d em %s\t\t %8d segundos foram gastos\n',generation, datestr(datetime()), toc(t))
-            plotFcn();
+        if ~Server
+        fprintf('Fim da geracao %3d em %s\t\t %8d segundos foram gastos\n',generation, datestr(datetime()), toc(t))
         end
+        plotFcn();
         if stopCriterium || stop
             break;
         end
-        if Server
-            t = tic();
-        end
+        %t = tic();
     end
-    if Server
-        savefig([FILE '.fig']);                       % Salva a figura resultante do GA como fig
-        print([FILE '.png'],'-dpng','-noui');         % Salva a figura resultante do GA como PNG
-    end
+    savefig([FILE '.fig']);                       % Salva a figura resultante do GA como fig
+    print([FILE '.png'],'-dpng','-noui');         % Salva a figura resultante do GA como PNG
+
     temp = struct('DNA',pop); 
     save([FILE '_pop.mat'],'-struct','temp');
     temp = struct('DNA',bestOfGeneration); 

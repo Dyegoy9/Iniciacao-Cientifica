@@ -1,6 +1,6 @@
 function prepareSignalsCurve(Server)
-    if Server
-        NsinaisTotal = 50000; %Numero de sinais totais que serao gerados. Obrigatoriamente multiplo de 100
+    if ~Server
+        NsinaisTotal = 100; %Numero de sinais totais que serao gerados. Obrigatoriamente multiplo de 100
     else
         NsinaisTotal = 50000;
     end
@@ -13,7 +13,7 @@ function prepareSignalsCurve(Server)
     SNR = -40:0.25:0;
     nSNR = length(SNR);
     SNRfun = @()-15+5*randn;    % SNR aleatoria, centrada em -15, com desvio padrao igual a 5
-    if Server
+    if ~Server
         tic
     end
     % Prepara os sinais para os numeros de janelas dejesados
@@ -23,13 +23,13 @@ function prepareSignalsCurve(Server)
         res = nan(Nfun,nSNR,NsinaisTotal/100,100);
         resLim = nan(Nfun,nSNR,NsinaisTotal/100,100);
 	    for iSNR = 1:nSNR
-            if Server
+            if ~Server
                 toc;
                 tic;
             end
 		    snr = SNR(iSNR);
 		    SNRfun = @()snr;
-            if Server
+            if ~Server
                 fprintf('SNR %08.3f: ', snr)
             end
 		    % Gera os sinais em grupos de 100, para evitar problemas de memoria
@@ -40,7 +40,7 @@ function prepareSignalsCurve(Server)
 				    resLim(func, iSNR, iSinais,:) = funcoesPrimitivas(func, S3, S1, S4, S2, M, SFREQ);
                 end
                 if mod(iSinais,10)==0
-                    if Server
+                    if ~Server
                         fprintf('%4d janelas: %6d de %6d conclu�dos.\n', M, iSinais, NsinaisTotal/100);
                     end
                 end

@@ -1,25 +1,30 @@
 clear;clc;close;
-Server = true;
+Server = false;
 GerarDados = false;
 DeleteMonteCarloData = false;
 RunEvo = true;
 %
 RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo);
 function RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo)
-    %%%Server%%% Variavel que controla fatores para rodar como teste ou no servidor% false : tira os prints e warnigs e não salva as imagens referentes a
-    %   evolução dos detectores nem as mostra na tela.
-    %   true : mostra todos os prints bem como salva e mostra as figuras
+    %%%Server%%% 
+    %  controla se queremos rodar o código com parâmetros de servidos
+    %   true - Parametros de servidor, como processamento paralelo e
+    %   geração de montecarlo com 50mil dados e muita memória ram
+    %  false - Parâmetros de computador local poucos dados simulados e sem
+    %  processamento paralelo
     
-    %%%GerarDados%%% Controla se queremos ou não gerar dados por simulação
+    %%%GerarDados%%% 
+    %   Controla se queremos ou não gerar dados por simulação
     %   de montecarlo com base nas funções primitivas pré estabelecidas
     
-    %%%DeleteMonteCarloData%%% Se voce for realizar outro experimento e não
+    %%%DeleteMonteCarloData%%% 
+    %   Se voce for realizar outro experimento e não
     %   quiser que os dados se misturem, isto apaga todos os dados dos
     %   experimentos anteriores.
     
     
-    if Server
-        NumRep = 20;
+    if ~Server
+        NumRep = 1;
     else 
         NumRep = 20;
     end
@@ -75,15 +80,18 @@ function RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo)
     %%%%%%%%%%%%%%%% Roda o argoritmo NumRep Vezes %%%%%%%%%%%%%%%%%
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     if RunEvo
-        for i = 1:NumRep  
+        if ~Server
+            gpT(Server,res60,resLim60);
+        else
+            parfor i = 1:NumRep  
             gpT(Server,res60,resLim60);
             %gpT(Server);
+            end
         end
         cd AnaliseCurvas
         CalcularCurvasResultados(Server);
         analiseVP(Server,res60,resLim60);
-        close all;
         findBest();
     end
-    exit()
+    exit();
 end

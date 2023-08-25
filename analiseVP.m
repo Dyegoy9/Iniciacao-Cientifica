@@ -29,7 +29,7 @@ function analiseVP(Server,res60,resLim60)
     for i = 1:2
         files = dir(TOKEN{i});
         for j = 1:length(files)
-            if Server
+            if ~Server
                 tic
             end
             arquivo = files(j).name;    % Obtem o nome do arquivo do experimento analisado
@@ -51,7 +51,7 @@ function analiseVP(Server,res60,resLim60)
                 fp60(k) = mean(funcoes( DNA, RESESP60 )>lim60);
             end
             save([outdir '/' arquivo],'vp60','fp60','vpM60','fpM60')
-            if Server
+            if ~Server
                 fprintf('Arquivo %30s       %f segundos\n',arquivo, toc);
             end
     end

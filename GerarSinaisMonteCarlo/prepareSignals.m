@@ -1,6 +1,6 @@
 function prepareSignals(Server)
-    if Server
-        NsinaisTotal = 50000; %Numero de sinais totais que serao gerados. Obrigatoriamente multiplo de 100 (Pois gera de 100 em 100)
+    if ~Server
+        NsinaisTotal = 1000; %Numero de sinais totais que serao gerados. Obrigatoriamente multiplo de 100 (Pois gera de 100 em 100)
     else
         NsinaisTotal = 50000;
     end
@@ -26,7 +26,7 @@ function prepareSignals(Server)
                 res(func, 1, iSinais,:) = funcoesPrimitivas(func, S5, S1, S6, S2, M, SFREQ);
                 resLim(func, 1, iSinais,:) = funcoesPrimitivas(func, S3, S1, S4, S2, M, SFREQ);
             end
-            if Server
+            if ~Server
                 fprintf('%4d janelas: %6d de %6d conclu�dos.\n', M, iSinais, NsinaisTotal/100);
             end
         end
