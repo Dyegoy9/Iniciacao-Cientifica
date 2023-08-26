@@ -5,7 +5,7 @@ function CalcularCurvasResultados(Server)
     TOKEN = {'ResultadosEVO/EXPERIMENTO*_pop.mat'};%, 'ResultadosEVO/EXPERIMENTO1*_hist.mat'};
     %SNR = -50:10;
     SNR = -40:0.25:0;
-    curvaMSC = calcCurve(MSCdna);
+    curvaMSC = calcCurve(MSCdna,Server);
     ind10 = find(curvaMSC>0.1,1);
     ind95 = find(curvaMSC>0.95,1);
 
@@ -20,10 +20,18 @@ function CalcularCurvasResultados(Server)
             nDNAs = length(dados.DNA);  % Obt�m o n�mero de DNAs no experimento em quest�o
             curvas = cell(nDNAs,1);     % Prealoca um cell array para as curvas
             increm = nan(nDNAs,1);      % Prealoca o vetor com os incrementos
-            for k = 1:nDNAs
-                X = calcCurve(dados.DNA(k));
-                curvas{k} = X;
-                increm(k) = trapz(X(ind10:ind95)-curvaMSC(ind10:ind95))/trapz(curvaMSC(ind10:ind95))*100;
+            if ~Server
+                for k = 1:nDNAs
+                    X = calcCurve(dados.DNA(k),Server);
+                    curvas{k} = X;
+                    increm(k) = trapz(X(ind10:ind95)-curvaMSC(ind10:ind95))/trapz(curvaMSC(ind10:ind95))*100;
+                end
+            else
+                parfor k = 1:nDNAs
+                    X = calcCurve(dados.DNA(k),Server);
+                    curvas{k} = X;
+                    increm(k) = trapz(X(ind10:ind95)-curvaMSC(ind10:ind95))/trapz(curvaMSC(ind10:ind95))*100;
+                end
             end
             save(['ResultadosCurva/' arquivo],'curvas','increm');
             if Server

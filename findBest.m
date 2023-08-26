@@ -1,15 +1,11 @@
-clear all;clc;close all;
+function findBest(Server)
 PrintNome = false;
-
-[ExArq, vp60, fp60,increm,curvasTudo,DNATudo ] = GetResultInfo(PrintNome);
-try
-rmpath('AnaliseCurvas')
-catch
+[ExArq, vp60, fp60,vpMSC,fpMSC,increm,curvasTudo,DNATudo ] = GetResultInfo(PrintNome);
 end
 addpath('AnaliseCurvas');
 
 DnaMSC = treeGP(2001);
-curvaMSC = calcCurve(DnaMSC);
+curvaMSC = calcCurve(DnaMSC,Server);
 
 if ExArq
     mkdir('ResultadosDetectores')
@@ -28,7 +24,7 @@ if ExArq
     saveas(gcf,['ResultadosDetectores/CurvaSNRMelhorDetector.png'])
     %equacao = GetEquation(DNATudo,id(1));
     Melhoresincrem = increm(individuos_bons);
-    BestDetectorsTest = TestBestDetectors(DnaMSC,DNATudo(individuos_bons),Melhoresincrem)
+    BestDetectorsTest = TestBestDetectors(individuos_bons,DnaMSC,DNATudo(individuos_bons),Melhoresincrem,fpMSC,fp60)
     MelhoresDnas = DNATudo(individuos_bons);
     for i = 1:length(MelhoresDnas)
         MelhoresDnas(i).visualizemain;
@@ -44,7 +40,7 @@ end
 %DnaRef = DNATudo(id);
 %[H,p,e1,e2] = McnemarTest60(DnaRef,DnaMSC);
 
-function [ExArq,vp60,fp60,increm,curvasTudo,DNATudo ] = GetResultInfo(PrintNome)
+function [ExArq,vp60,fp60,vpMSC,fpMSC,increm,curvasTudo,DNATudo ] = GetResultInfo(PrintNome)
 % Obtêm metricas de resultados para um dado experimento realizado
         eegResultsDir = 'ResultadosEEG/';
         evoResultsDir = 'ResultadosEVO/';
@@ -78,12 +74,14 @@ function [ExArq,vp60,fp60,increm,curvasTudo,DNATudo ] = GetResultInfo(PrintNome)
                 DNATudo(cont) = Evo.DNA(k);
             end
         end
+        vpMSC = eeg.vpM60(1);
+        fpMSC = eeg.fpM60(1);
         ExArq = true;
         disp('Dados Exportados com sucesso')
     else 
         disp('Sem arquivos para análise')
         ExArq = false;
-        vp30 = 0; vp60 = 0; fp30 = 0; fp60 = 0; increm = 0; curvasTudo = 0;DNATudo = 0;
+        vp30 = 0; vp60 = 0; fp30 = 0; fp60 = 0; increm = 0; curvasTudo = 0;DNATudo = 0; vpMSC =0; fpMSC =0;
     end
 end
 
@@ -93,15 +91,14 @@ function [fitnessIndividuos, individuos_bons] = getBest(vp60,fp60,increm,DNATudo
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %Carrega dados para analise do fp no fitness
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    load('EEG_sinais/res60Test.mat');     % Carrega os dados dos EEGs reais
-    RES60 = RES;
-    RESESP60 = RESESP;
+    Dado = load('EEG_sinais/res60Test.mat');     % Carrega os dados dos EEGs reais
+    RES60 = Dado.RES;
+    RESESP60 = Dado.RESESP;
     
-    load('MC/resX_60.mat'); 
-    resLim60 = resLim;
-    load('MC/resY_60.mat');% Carrega os dados simulados para encontrar o limiar
-    res60 = res;
-    resLim60 = resLim;
+    Dado = load('MC/resX_60.mat'); 
+    resLim60 = Dado.resLim;
+    Dado = load('MC/resY_60.mat');% Carrega os dados simulados para encontrar o limiar
+    res60 = Dado.res;
     clear RES RESESP resLim
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %
@@ -209,33 +206,33 @@ disp(["ID " id])
 end
 
 % Realiza o teste de MCnemar para os melhores detectores encontrados
-function TestParameters = TestBestDetectors(DnaMSC,DNAs,increm)
+function TestParameters = TestBestDetectors(individuos_bons,DnaMSC,DNAs,increm,fpMSC,fp60)
 file = load('MC/resY_60.mat');
 res60 = file.res;
 file = load('MC/resX_60.mat');
 resLim60 = file.resLim;
 clear RES RESESP resLim
-TestParameters = zeros(length(DNAs),8);
+TestParameters = zeros(length(DNAs),10);
 for i = 1:length(DNAs)
     Fitness = fitness(DNAs(i),true,res60,resLim60);
     FitnessMSC = fitness(DnaMSC,true,res60,resLim60);
     [H,p,e1,e2] = McnemarTest60(DnaMSC,DNAs(i));
-    TestParameters(i,:) = [i,H,p,e1,FitnessMSC,e2,Fitness,increm(i)];
+    TestParameters(i,:) = [i,H,p,e1,FitnessMSC,fpMSC,e2,Fitness,fp60(individuos_bons(i)),increm(i)];
 end
 TestParameters = array2table(TestParameters);
 % Default heading for the columns will be A1, A2 and so on. 
 % You can assign the specific headings to your table in the following manner
-TestParameters.Properties.VariableNames(1:8) = {'Detector','H','P-Valor','TD-MSC','PD-MSC','TD-ND','PD-ND','Increm'};
+TestParameters.Properties.VariableNames(1:10) = {'Detector','H','P-Valor','TD-MSC','PD-MSC','FP-MSC','TD-ND','PD-ND','FP-ND','Increm'};
 end
 
 function [H,p,e1,e2] = McnemarTest60(DNA1,DNA2)
-    load('EEG_sinais/res60Test.mat');     % Carrega os dados dos EEGs reais 60 Janelas
-    RES60 = RES;
-    RESESP60 = RESESP;
-    load('MC/resX_60.mat');   % Carrega os dados simulados para encontrar o limiar
-    resLim60 = resLim;
-    load('MC/resY_60.mat');   % Carrega os dados simulados para encontrar o limiar
-    res60 = res;
+    Dado = load('EEG_sinais/res60Test.mat');     % Carrega os dados dos EEGs reais 60 Janelas
+    RES60 = Dado.RES;
+    RESESP60 = Dado.RESESP;
+    Dado = load('MC/resX_60.mat');   % Carrega os dados simulados para encontrar o limiar
+    resLim60 = Dado.resLim;
+    Dado = load('MC/resY_60.mat');   % Carrega os dados simulados para encontrar o limiar
+    res60 = Dado.res;
     clear RES RESESP resLim res
     res60DNA1 = funcoes( DNA1, RES60 ); % Aplica as funcoes nos dados reais (pesos e operações do dna do detector)
     res60DNA2 = funcoes( DNA2, RES60 );
@@ -250,10 +247,10 @@ function [H,p,e1,e2] = McnemarTest60(DNA1,DNA2)
     Reference = zeros(1,length(DNA2_Detection));
     % testa se o a taxa de deteccao do detector de DNA1 é maior que a do detector de
     % DNA2 [H = 0 Não é maior; H= 1 é maior]
-    [H,p,e1,e2] = testcholdout(DNA1_Detection,DNA2_Detection,Reference,Test = 'asymptotic')
+    [H,p,e1,e2] = testcholdout(DNA1_Detection,DNA2_Detection,Reference,Test = 'asymptotic');
 end
 
-
+end
     
 
 

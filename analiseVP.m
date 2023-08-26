@@ -16,8 +16,8 @@ function analiseVP(Server,res60,resLim60)
     MSCdna = treeGP(2001);
     %resR30 = funcoes( MSCdna, resLim30 );
     %lim30 = prctile(resR30(:),95);
-    %vpM30 = mean(funcoes( MSCdna, RES30 )>lim30);
-    %fpM30 = mean(funcoes( MSCdna, RESESP30 )>lim30);
+    %vpMSC = mean(funcoes( MSCdna, RES60 )>lim60);
+    %fpMSC = mean(funcoes( MSCdna, RESESP60 )>lim60);
     resR60 = funcoes( MSCdna, resLim60 );
     lim60 = prctile(resR60(:),95);
     vpM60 = mean(funcoes( MSCdna, RES60 )>lim60);

@@ -1,4 +1,4 @@
-function [curve] = calcCurve(DNA)
+function [curve] = calcCurve(DNA,Server)
 
 persistent resLim res
 
@@ -14,8 +14,15 @@ resR = funcoes( DNA, resLim );
 lim_sup5 = prctile(resR(:),95);
 [~, n, ~] = size(res);
 curve = nan(1,n);
-for i = 1:n
-    resR = funcoes(DNA, res(:,i,:));
-    curve(i)=mean(resR>lim_sup5);
+if ~Server
+    for i = 1:n
+        resR = funcoes(DNA, res(:,i,:));
+        curve(i)=mean(resR>lim_sup5);
+    end
+else
+    parfor i = 1:n
+        resR = funcoes(DNA, res(:,i,:));
+        curve(i)=mean(resR>lim_sup5);
+    end
 end
 end
