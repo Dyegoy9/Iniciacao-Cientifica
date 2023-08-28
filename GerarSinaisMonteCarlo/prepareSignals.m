@@ -4,7 +4,7 @@ function prepareSignals(Server)
         TamanhoGrupo = 100;
     else
         NsinaisTotal = 50000;
-        TamanhoGrupo = 1000;
+        TamanhoGrupo = 5000;
     end
     Njanelas = [60];% 90 120];
     NFFT = 1000;

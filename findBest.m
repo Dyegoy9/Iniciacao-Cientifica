@@ -1,7 +1,6 @@
 function findBest(Server)
 PrintNome = false;
 [ExArq, vp60, fp60,vpMSC,fpMSC,increm,curvasTudo,DNATudo ] = GetResultInfo(PrintNome);
-end
 addpath('AnaliseCurvas');
 
 DnaMSC = treeGP(2001);
