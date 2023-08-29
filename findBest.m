@@ -2,7 +2,6 @@ function findBest(Server)
 PrintNome = false;
 [ExArq, vp60, fp60,vpMSC,fpMSC,increm,curvasTudo,DNATudo ] = GetResultInfo(PrintNome);
 addpath('AnaliseCurvas');
-
 DnaMSC = treeGP(2001);
 curvaMSC = calcCurve(DnaMSC,Server);
 
@@ -192,7 +191,7 @@ plot(dominio,curvasTudo{1,id});
 hold on ;
 %load('AnaliseCurvas/curvaMSC.mat');
 plot(dominio,curvaMSC);
-title('Melhor Indivíduo (Dados Reais) e MSC');
+title('SNR curve comparing best detector found and MSC');
 ylabel('PD - Probability of Detection');
 xlabel('SNR (dB)');
 hold off;

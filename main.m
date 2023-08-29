@@ -1,7 +1,7 @@
 clear;clc;close;
 Server = true;
-GerarDados = true;
-DeleteMonteCarloData = true;
+GerarDados = false;
+DeleteMonteCarloData = false;
 RunEvo = true;
 %
 RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo);
@@ -91,7 +91,7 @@ function RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo)
         cd AnaliseCurvas
         CalcularCurvasResultados(Server);
         analiseVP(Server,res60,resLim60);
-        close all;clear all;clc;
+        close all;clc;
         findBest(Server);
     end
     exit();

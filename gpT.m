@@ -27,7 +27,7 @@ function gpT(Server,res60,resLim60,ExpNumber)
     replaceRate      = 0.1;
     initMaximumDepth = 3;
     initMinimumDepth = 2;
-    maximumDepth     = 4;
+    maximumDepth     = 5;
     nFunction        = 14;      % Numero de operacoes derivadas de outros detectores
     nBOperators      = 5;       % Numero de operadores binarios
     nUOperators      = 0;       % Numero de operadores unarios
@@ -112,7 +112,7 @@ function gpT(Server,res60,resLim60,ExpNumber)
                     end
                 end
                 w = rand();            % Create the weight at the pos
-                %w = min(max(w,-1),1);   % Constrain the weight value between -1 and 1
+                w = min(max(w,0),1);   % Constrain the weight value between -1 and 1
             
                 if flagIntermediate
                     operacao = randi([-nUOperators-nBOperators, -1]);    % Chose randomly the intermediate operation
@@ -284,8 +284,8 @@ function gpT(Server,res60,resLim60,ExpNumber)
                         end
                     end
                 end
-                w = -1 + 2*rand();            % Create the weight at the pos
-                w = min(max(w,-1),1);          % Constrain the weight value between -1 and 1
+                w = rand();            % Create the weight at the pos
+                w = min(max(w,0),1);          % Constrain the weight value between -1 and 1
             
                 if flagIntermediate
                     operacao = randi([-12, -1]);    % Chose randomly the intermediate operation

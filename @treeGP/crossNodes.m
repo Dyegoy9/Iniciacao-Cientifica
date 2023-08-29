@@ -33,7 +33,8 @@ function [offspring1, offspring2] = crossNodes(tree1, tree2, node1, node2)
 	tempArray2(2^predictDepthOffspring2-1)=0;       % Expand the array to the predicted max size
 	subtreeData1 = tree1.getSubtree(node1).getData();  % Get data from the desired subtree
 	subtreeData2 = tree2.getSubtree(node2).getData();  % Get data from the desired subtree
-	crossoverWeight();                              % Cross the weights of both trees
+	%crossoverWeight();                              % Cross the weights of both trees
+    AlternativeCrossoverWeight();
 	tempArray1 = clearTree(tempArray1, node1);  % Cleanup the tree1
 	tempArray2 = clearTree(tempArray2, node2);  % Cleanup the tree2
 	% Create a new indexing array for the subtrees
@@ -53,7 +54,7 @@ function [offspring1, offspring2] = crossNodes(tree1, tree2, node1, node2)
             
             % Recombine linearly the weight of both trees
 	function crossoverWeight()
-        alpha = 0.2;                    % Extra possible span
+        alpha = 0;                    % Extra possible span
         L = min(length(subtreeData1),length(subtreeData2)); % Get the minimun length between the trees
         A = rand(1,L)*(1+2*alpha)-alpha;% Get the weigth applied to the span range
         B = (1+2*alpha)-A;              % Get the weigth complement span range
@@ -64,6 +65,17 @@ function [offspring1, offspring2] = crossNodes(tree1, tree2, node1, node2)
         span = w1(1:L)-w2(1:L);         % Get the weight span
         w2(1:L) = w1(1:L)+span*B';      % Cross the weight of the first subtree
         w1(1:L) = w1(1:L)+span*A';      % Cross the weight of the second subtree
+        subtreeData1 = 1000*F1+w1;      % Return the weight information to the treee
+        subtreeData2 = 1000*F2+w2;      % Return the weight information to the treee
+    end
+    function AlternativeCrossoverWeight()
+        L = min(length(subtreeData1),length(subtreeData2)); % Get the minimun length between the trees
+        F1 = round(subtreeData1/1000);  % Get the function encoding of the subtree1
+        F2 = round(subtreeData2/1000);  % Get the function encoding of the subtree2
+        w1 = subtreeData1-1000*F1;      % Get the weights of the subtree1
+        w2 = subtreeData2-1000*F2;      % Get the weights of the subtree2
+        w1(1:L) = (w1(1:L) + w2(1:L))/2;    
+        w2(1:L) = (w1(1:L) + w2(1:L))/2;  
         subtreeData1 = 1000*F1+w1;      % Return the weight information to the treee
         subtreeData2 = 1000*F2+w2;      % Return the weight information to the treee
     end
