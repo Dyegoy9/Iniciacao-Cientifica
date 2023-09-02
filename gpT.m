@@ -14,9 +14,9 @@ function gpT(Server,res60,resLim60,ExpNumber)
     stop             = false; % Utilizado para parar manualmente a evolucao na proxima geracao
     if Server 
         parallel = true;
-        populationSize   = 1000;
+        populationSize   = 100;
         maxGeneration    = 100;
-        numberOfElits    = 100;
+        numberOfElits    = 10;
     else
         parallel = false;
         populationSize   = 100;
@@ -27,7 +27,7 @@ function gpT(Server,res60,resLim60,ExpNumber)
     replaceRate      = 0.1;
     initMaximumDepth = 3;
     initMinimumDepth = 2;
-    maximumDepth     = 5;
+    maximumDepth     = 6;
     nFunction        = 14;      % Numero de operacoes derivadas de outros detectores
     nBOperators      = 5;       % Numero de operadores binarios
     nUOperators      = 0;       % Numero de operadores unarios
