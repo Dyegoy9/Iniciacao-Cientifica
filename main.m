@@ -26,7 +26,7 @@ function RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo)
     if ~Server
         NumRep = 1;
     else 
-        NumRep = 40;
+        NumRep = 100;
     end
     %Gera os diretórios necessários e faz backup do experimento anterior
     if DeleteMonteCarloData
