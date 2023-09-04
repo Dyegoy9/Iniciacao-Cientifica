@@ -33,8 +33,8 @@ function [offspring1, offspring2] = crossNodes(tree1, tree2, node1, node2)
 	tempArray2(2^predictDepthOffspring2-1)=0;       % Expand the array to the predicted max size
 	subtreeData1 = tree1.getSubtree(node1).getData();  % Get data from the desired subtree
 	subtreeData2 = tree2.getSubtree(node2).getData();  % Get data from the desired subtree
-	crossoverWeight();                              % Cross the weights of both trees
-    %AlternativeCrossoverWeight();
+	%crossoverWeight();                              % Cross the weights of both trees
+    AlternativeCrossoverWeight();
 	tempArray1 = clearTree(tempArray1, node1);  % Cleanup the tree1
 	tempArray2 = clearTree(tempArray2, node2);  % Cleanup the tree2
 	% Create a new indexing array for the subtrees
