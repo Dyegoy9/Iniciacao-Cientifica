@@ -1,4 +1,4 @@
-function gpT(Server,res60,resLim60,ExpNumber)
+function gpT(Server,res60,resLim60,ExpNumber,SNR)
 % PARAMETERS
 % populationSize    - Number of individuals on each generation
 % maxGeneration     - Maximun of generations stop criterium
@@ -53,7 +53,7 @@ function gpT(Server,res60,resLim60,ExpNumber)
 
     EXP = ['ResultadosEVO/EXPERIMENTO*_pop.mat'];
     nexp = length(dir(EXP));
-    FILE = ['ResultadosEVO/EXPERIMENTO' ExpNumber '_' num2str(nexp+1)];
+    FILE = ['ResultadosEVO/EXPERIMENTO' ExpNumber '_' num2str(SNR) 'dB'];
     if ~Server
     fprintf('O algoritmo foi inicializado em %s\n',datestr(datetime()))
     t = tic();

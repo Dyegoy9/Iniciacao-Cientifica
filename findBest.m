@@ -1,6 +1,6 @@
-function findBest(Server)
+function findBest(Server,SNR)
 PrintNome = false;
-[ExArq, vp60, fp60,vpMSC,fpMSC,increm,curvasTudo,DNATudo ] = GetResultInfo(PrintNome);
+[ExArq, vp60, fp60,vpMSC,fpMSC,increm,curvasTudo,DNATudo ] = GetResultInfo(PrintNome,SNR);
 addpath('AnaliseCurvas');
 DnaMSC = treeGP(2001);
 curvaMSC = calcCurve(DnaMSC,Server);
@@ -13,13 +13,13 @@ if ExArq
     id = individuos_bons(id);
     id = id(1);
     plotAllBestSNR(curvaMSC,curvasTudo,individuos_bons);
-    saveas(gcf,['ResultadosDetectores/CurvaSNRMelhores.png'])
+    saveas(gcf,['ResultadosDetectores/CurvaSNRMelhores_' num2str(SNR) 'dB.png' ])
     %plotBest(individuos_bons,fitnessIndividuos);
     %id = find(fitnessIndividuos == max(fitnessIndividuos));
     %id = individuos_bons(id);
     %plotBestSNR(curvaMSC,curvasTudo,id(1));
     plotBestRealData(id,curvaMSC,vp60,fp60,individuos_bons,curvasTudo);
-    saveas(gcf,['ResultadosDetectores/CurvaSNRMelhorDetector.png'])
+    saveas(gcf,['ResultadosDetectores/CurvaSNRMelhorDetector_' num2str(SNR) 'dB.png'])
     %equacao = GetEquation(DNATudo,id(1));
     Melhoresincrem = increm(individuos_bons);
     BestDetectorsTest = TestBestDetectors(individuos_bons,DnaMSC,DNATudo(individuos_bons),Melhoresincrem,fpMSC,fp60)
@@ -27,23 +27,23 @@ if ExArq
     for i = 1:length(MelhoresDnas)
         MelhoresDnas(i).visualizemain;
         set(gcf,'unit','norm','position',[0 0 0.8 0.8]);
-        saveas(gcf,['ResultadosDetectores/' 'Dna' num2str(i) 'Detectores.png'])
+        saveas(gcf,['ResultadosDetectores/' 'Dna' num2str(i) '_' num2str(SNR) 'dBDetectores.png'])
         MelhoresDnas(i).visualizeweight;
         set(gcf,'unit','norm','position',[0 0 0.8 0.8]);
-        saveas(gcf,['ResultadosDetectores/' 'Dna' num2str(i) 'Pesos.png'])
+        saveas(gcf,['ResultadosDetectores/' 'Dna' num2str(i) '_' num2str(SNR) 'dBPesos.png'])
     end
-    save('ResultadosDetectores/MelhoresDetectores.mat','BestDetectorsTest','MelhoresDnas')
+    save(['ResultadosDetectores/MelhoresDetectores_' num2str(SNR) 'dB.mat'],'BestDetectorsTest','MelhoresDnas')
 end
 
 %DnaRef = DNATudo(id);
 %[H,p,e1,e2] = McnemarTest60(DnaRef,DnaMSC);
 
-function [ExArq,vp60,fp60,vpMSC,fpMSC,increm,curvasTudo,DNATudo ] = GetResultInfo(PrintNome)
+function [ExArq,vp60,fp60,vpMSC,fpMSC,increm,curvasTudo,DNATudo ] = GetResultInfo(PrintNome,SNR)
 % Obtêm metricas de resultados para um dado experimento realizado
         eegResultsDir = 'ResultadosEEG/';
         evoResultsDir = 'ResultadosEVO/';
         curveResultsDir = 'ResultadosCurva/';
-        arquivos = dir([eegResultsDir 'EXP*pop*']);
+        arquivos = dir([eegResultsDir 'EXP*' num2str(SNR) 'dB*pop*']);
     %Verifica se existem arquivos no diretório
     if length(arquivos) ~= 0
         %fp30=nan(length(arquivos)*100,1);

@@ -1,4 +1,4 @@
-function GenerateMonteCarlo(Server)
+function GenerateMonteCarlo(Server,SNR)
     DIR = pwd();
 
     cd('GerarSinaisMonteCarlo')
@@ -6,13 +6,14 @@ function GenerateMonteCarlo(Server)
     if ~Server
         fprintf('Generating simulated signals for GP\n')
     end
-    prepareSignals(Server)
+    prepareSignals(Server,SNR)
 
     if ~Server
         fprintf('Generating simulated signals with multiples SNR\n')
     end
-    prepareSignalsCurve(Server)
-
+    if SNR == -20
+        prepareSignalsCurve(Server)
+    end
     if ~Server
         fprintf('Preparing real EEG data\n')
     end
