@@ -1,4 +1,4 @@
-function gpT(Server,res60,resLim60,ExpNumber,SNR)
+function gpT(Server,res60,resLim60,ExpNumber)
 % PARAMETERS
 % populationSize    - Number of individuals on each generation
 % maxGeneration     - Maximun of generations stop criterium
@@ -51,9 +51,7 @@ function gpT(Server,res60,resLim60,ExpNumber,SNR)
     bestFitDepth = nan(1,maxGeneration);
     bestFitCount = nan(1,maxGeneration);
 
-    EXP = ['ResultadosEVO/EXPERIMENTO*_pop.mat'];
-    nexp = length(dir(EXP));
-    FILE = ['ResultadosEVO/EXPERIMENTO' ExpNumber '_' num2str(SNR) 'dB'];
+    FILE = ['ResultadosEVO/EXPERIMENTO' ExpNumber];
     if ~Server
     fprintf('O algoritmo foi inicializado em %s\n',datestr(datetime()))
     t = tic();

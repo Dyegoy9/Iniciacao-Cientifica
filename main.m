@@ -1,18 +1,11 @@
 clear;clc;close;
 Server = true;
 GerarDados = true;
-DeleteMonteCarloData = false;
+DeleteMonteCarloData = true;
 RunEvo = true;
-SNR = -19:0.25:-10;
-    
-if Server
-    for i = SNR
-        RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo,i);
-        disp(['Concluído para SNR_' num2str(i) 'dB'])
-    end
-    exit();
-end
-function RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo,SNR)
+%
+RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo);
+function RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo)
     %%%Server%%% 
     %  controla se queremos rodar o código com parâmetros de servidos
     %   true - Parametros de servidor, como processamento paralelo e
@@ -33,7 +26,7 @@ function RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo,SNR)
     if ~Server
         NumRep = 1;
     else 
-        NumRep = 20;
+        NumRep = 50;
     end
     %Gera os diretórios necessários e faz backup do experimento anterior
     if DeleteMonteCarloData
@@ -67,7 +60,7 @@ function RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo,SNR)
     catch
     end
     if GerarDados
-        GenerateMonteCarlo(Server,SNR)
+        GenerateMonteCarlo(Server)
     end
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %%%%%%%% Carrega dados para analise do fp no fitness %%%%%%%%%%%
@@ -91,7 +84,7 @@ function RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo,SNR)
             gpT(Server,res60,resLim60,'1');
         else
           parfor i = 1:NumRep  
-            gpT(Server,res60,resLim60,num2str(i),SNR);
+            gpT(Server,res60,resLim60,num2str(i));
             %gpT(Server);
             end
         end
@@ -99,6 +92,7 @@ function RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo,SNR)
         CalcularCurvasResultados(Server);
         analiseVP(Server,res60,resLim60);
         close all;clc;
-        %findBest(Server,SNR);
+        findBest(Server);
     end
+    exit();
 end

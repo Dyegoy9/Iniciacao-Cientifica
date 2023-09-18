@@ -1,6 +1,6 @@
 %Parâmetros usados nos testes;
 stop             = false; 
-populationSize   = 1000;
+populationSize   = 250;
 maxGeneration = 100;
 numberOfElits    = 100;
 mutationRate     = 0.05;
@@ -11,7 +11,7 @@ maximumDepth     = 5;
 nFunction        = 14;      
 nBOperators      = 5;       
 nUOperators      = 0;      
-SNR = -18; 
+SNR = -12; 
 NsinaisTotal = 50000; 
 Njanelas = [60];
 NFFT = 1000;

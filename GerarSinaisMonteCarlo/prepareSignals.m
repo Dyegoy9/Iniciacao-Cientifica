@@ -1,4 +1,4 @@
-function prepareSignals(Server,SNR)
+function prepareSignals(Server)
     if ~Server
         NsinaisTotal = 1000;%Numero de sinais totais que serao gerados. Obrigatoriamente multiplo de TamanhoGrupo (Pois gera de TamanhoGrupo em TamanhoGrupo)
         TamanhoGrupo = 100;
@@ -11,8 +11,8 @@ function prepareSignals(Server,SNR)
     SFREQ = 80;
     FS = 1000;
     %SNRfun = @()-15+5*randn;    % SNR aleatoria, centrada em -15, com desvio padrao igual a 10
-    %snr = -15;
-    SNRfun = @()SNR;
+    snr = 0;
+    SNRfun = @()snr;
     Nfun = 14;
 
     % Prepara os sinais para os numeros de janelas dejesados
