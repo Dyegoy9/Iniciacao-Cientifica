@@ -3,10 +3,10 @@ Server = true;
 GerarDados = true;
 DeleteMonteCarloData = false;
 RunEvo = true;
-SNR = -20:0.25:-10;
+SNR = -19:0.25:-10;
     
 if Server
-    parfor i = SNR
+    for i = SNR
         RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo,i);
         disp(['Concluído para SNR_' num2str(i) 'dB'])
     end
@@ -99,6 +99,6 @@ function RunPG(Server,GerarDados,DeleteMonteCarloData,RunEvo,SNR)
         CalcularCurvasResultados(Server);
         analiseVP(Server,res60,resLim60);
         close all;clc;
-        findBest(Server,SNR);
+        %findBest(Server,SNR);
     end
 end
