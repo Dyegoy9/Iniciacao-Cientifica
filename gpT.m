@@ -14,9 +14,9 @@ function gpT(Server,res60,resLim60,ExpNumber)
     stop             = false; % Utilizado para parar manualmente a evolucao na proxima geracao
     if Server 
         parallel = true;
-        populationSize   = 250;
-        maxGeneration    = 100;
-        numberOfElits    = 10;
+        populationSize   = 1000;
+        maxGeneration    = 50;
+        numberOfElits    = 100;
     else
         parallel = false;
         populationSize   = 100;
