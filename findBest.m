@@ -8,8 +8,9 @@ curvaMSC = calcCurve(DnaMSC,Server);
 if ExArq
     mkdir('ResultadosDetectores')
     [fitnessIndividuos, individuos_bons] = getBest(vp60,fp60,increm,DNATudo);
-    VpMelhores = vp60(individuos_bons);
-    id = find(VpMelhores == max(VpMelhores));
+    %VpMelhores = vp60(individuos_bons);
+    %id = find(VpMelhores == max(VpMelhores));
+    id = find(increm == max(increm));
     id = individuos_bons(id);
     id = id(1);
     plotAllBestSNR(curvaMSC,curvasTudo,individuos_bons);
@@ -103,8 +104,8 @@ function [fitnessIndividuos, individuos_bons] = getBest(vp60,fp60,increm,DNATudo
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     Server = false;
     % Busca os indices do vetor falso positivo e verdadeiro positivo
-    critFp60 = find(0.1 > fp60 > 0);
-    critVp60 = find(vp60 > 0.485);
+    critFp60 = find(1 > fp60 > 0);
+    critVp60 = find(vp60 > 0);
     critIncrem = find(increm>0);
     cont = 0;
     individuos_bons = [];

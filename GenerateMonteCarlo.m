@@ -7,7 +7,7 @@ function GenerateMonteCarlo(Server)
         fprintf('Generating simulated signals for GP\n')
     end
     prepareSignals(Server)
-    prepareSignalsCurve(Server)
+    %prepareSignalsCurve(Server)
 
     if ~Server
         fprintf('Generating simulated signals with multiples SNR\n')
