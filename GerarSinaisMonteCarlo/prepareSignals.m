@@ -11,7 +11,7 @@ function prepareSignals(Server)
     SFREQ = 80;
     FS = 1000;
     %SNRfun = @()-15+5*randn;    % SNR aleatoria, centrada em -15, com desvio padrao igual a 10
-    snr = -14;
+    snr = -12;
     SNRfun = @()snr;
     Nfun = 14;
 
