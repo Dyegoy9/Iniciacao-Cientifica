@@ -25,14 +25,12 @@ if ExArq
     Melhoresincrem = increm(individuos_bons);
     BestDetectorsTest = TestBestDetectors(individuos_bons,DnaMSC,DNATudo(individuos_bons),Melhoresincrem,fpMSC,fp60)
     MelhoresDnas = DNATudo(individuos_bons);
-    for i = 1:length(MelhoresDnas)
-        MelhoresDnas(i).visualizemain;
+        DNATudo(id).visualizemain;
         set(gcf,'unit','norm','position',[0 0 0.8 0.8]);
         saveas(gcf,['ResultadosDetectores/' 'Dna' num2str(i) 'Detectores.png'])
-        MelhoresDnas(i).visualizeweight;
+        DNATudo(id).visualizeweight;
         set(gcf,'unit','norm','position',[0 0 0.8 0.8]);
         saveas(gcf,['ResultadosDetectores/' 'Dna' num2str(i) 'Pesos.png'])
-    end
     save('ResultadosDetectores/MelhoresDetectores.mat','BestDetectorsTest','MelhoresDnas')
 end
 
