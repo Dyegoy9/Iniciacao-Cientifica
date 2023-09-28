@@ -1,6 +1,6 @@
 clear;clc;close;
 Server = false;
-GerarDados = false;
+GerarDados = true;
 DeleteMonteCarloData = false;
 RunEvo = true;
 %
