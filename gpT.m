@@ -19,9 +19,9 @@ function gpT(Server,res60,resLim60,ExpNumber)
         numberOfElits    = 100;
     else
         parallel = false;
-        populationSize   = 100;
-        maxGeneration    = 20;
-        numberOfElits    = 10;
+        populationSize   = 1000;
+        maxGeneration    = 50;
+        numberOfElits    = 100;
     end
     mutationRate     = 0.05;
     replaceRate      = 0.1;

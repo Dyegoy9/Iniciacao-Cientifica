@@ -27,10 +27,10 @@ if ExArq
     MelhoresDnas = DNATudo(individuos_bons);
         DNATudo(id).visualizemain;
         set(gcf,'unit','norm','position',[0 0 0.8 0.8]);
-        saveas(gcf,['ResultadosDetectores/' 'Dna' num2str(i) 'Detectores.png'])
+        saveas(gcf,['ResultadosDetectores/' 'Dna' num2str(id) 'Detectores.png'])
         DNATudo(id).visualizeweight;
         set(gcf,'unit','norm','position',[0 0 0.8 0.8]);
-        saveas(gcf,['ResultadosDetectores/' 'Dna' num2str(i) 'Pesos.png'])
+        saveas(gcf,['ResultadosDetectores/' 'Dna' num2str(id) 'Pesos.png'])
     save('ResultadosDetectores/MelhoresDetectores.mat','BestDetectorsTest','MelhoresDnas')
 end
 

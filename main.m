@@ -1,5 +1,5 @@
 clear;clc;close;
-Server = true;
+Server = false;
 GerarDados = false;
 DeleteMonteCarloData = false;
 RunEvo = true;
